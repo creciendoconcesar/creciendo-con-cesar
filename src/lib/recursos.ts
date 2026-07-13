@@ -9,6 +9,8 @@ export type Recurso = {
   fileUrl?: string;
   /** Link de checkout de Hotmart, solo para recursos de pago. */
   hotmartUrl?: string;
+  /** Ruta de la portada en /public. Si falta, se muestra un placeholder. */
+  coverImage?: string;
 };
 
 export const recursos: Recurso[] = [
@@ -26,6 +28,7 @@ export const recursos: Recurso[] = [
       "Para cualquier persona evaluando una oportunidad de negocio o ingreso adicional, antes de comprometer su dinero o su tiempo.",
     type: "pago",
     hotmartUrl: "https://go.hotmart.com/I106728010K?dp=1",
+    coverImage: "/covers/los-7-filtros-antifraudes.jpg",
   },
   {
     slug: "de-seguidor-a-lider-y-monetiza",
@@ -41,10 +44,11 @@ export const recursos: Recurso[] = [
       "Para emprendedores, creadores de contenido y cualquiera que quiera usar las redes sociales para generar autoridad, confianza e ingresos de forma profesional.",
     type: "pago",
     hotmartUrl: "https://go.hotmart.com/R106466240Q?dp=1",
+    coverImage: "/covers/de-seguidor-a-lider-y-monetiza.jpg",
   },
   {
     slug: "secretos-de-las-ventas-millonarias",
-    title: "Secretos de las Ventas Millonarias",
+    title: "El Secreto Detrás de las Ventas Millonarias",
     description:
       "Descubre las estrategias y técnicas de venta que utilizan los mejores vendedores para generar confianza, superar objeciones y cerrar más ventas. Un ebook práctico para aumentar tus ingresos y potenciar cualquier negocio.",
     bullets: [
@@ -56,6 +60,7 @@ export const recursos: Recurso[] = [
       "Para quien vende cualquier producto, servicio o negocio propio y quiere aumentar sus ingresos con técnicas de venta reales.",
     type: "pago",
     hotmartUrl: "https://go.hotmart.com/F106466609K",
+    coverImage: "/covers/secretos-de-las-ventas-millonarias.jpg",
   },
   {
     slug: "7-dias-para-dominar-meta-ads",
@@ -71,6 +76,7 @@ export const recursos: Recurso[] = [
       "Para quien quiere hacer crecer su negocio con campañas rentables en Facebook e Instagram, sin experiencia previa en publicidad digital.",
     type: "pago",
     hotmartUrl: "https://go.hotmart.com/E106727777K?dp=1",
+    coverImage: "/covers/7-dias-para-dominar-meta-ads.jpg",
   },
 ];
 

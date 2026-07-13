@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { recursos, getRecurso } from "@/lib/recursos";
 import { PhotoPlaceholder } from "@/components/PhotoPlaceholder";
@@ -35,10 +36,22 @@ export default async function RecursoDetailPage({
   return (
     <section className="mx-auto max-w-4xl px-6 py-16 md:py-24">
       <div className="grid gap-10 md:grid-cols-2 md:items-start">
-        <PhotoPlaceholder
-          label={`portada de ${recurso.title}`}
-          className="order-last aspect-[3/4] w-full md:order-first"
-        />
+        {recurso.coverImage ? (
+          <div className="relative order-last aspect-[3/4] w-full overflow-hidden rounded-card border border-border bg-surface md:order-first">
+            <Image
+              src={recurso.coverImage}
+              alt={`Portada de ${recurso.title}`}
+              fill
+              sizes="(min-width: 768px) 480px, 100vw"
+              className="object-cover"
+            />
+          </div>
+        ) : (
+          <PhotoPlaceholder
+            label={`portada de ${recurso.title}`}
+            className="order-last aspect-[3/4] w-full md:order-first"
+          />
+        )}
         <div>
           <h1 className="mb-4 font-display text-2xl font-bold text-text-primary md:text-3xl">
             {recurso.title}
