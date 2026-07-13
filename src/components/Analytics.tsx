@@ -1,8 +1,14 @@
 import Script from "next/script";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 /**
  * Cada integración solo se activa si su variable de entorno está definida.
  * Ver README.md para la lista de cuentas que hay que crear.
+ *
+ * GA4 usa el componente oficial de @next/third-parties/google — es la
+ * práctica recomendada por el equipo de Next.js (más optimizado que un
+ * <Script> manual). Si ya usas Google Tag Manager, GA4 se configura desde
+ * ahí en vez de cargarlo por separado (recomendación oficial de Next.js).
  */
 export function Analytics() {
   const gtmId = process.env.NEXT_PUBLIC_GTM_ID;
@@ -18,17 +24,7 @@ export function Analytics() {
         </Script>
       )}
 
-      {gaId && !gtmId && (
-        <>
-          <Script
-            src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
-            strategy="afterInteractive"
-          />
-          <Script id="ga4" strategy="afterInteractive">
-            {`window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', '${gaId}');`}
-          </Script>
-        </>
-      )}
+      {gaId && !gtmId && <GoogleAnalytics gaId={gaId} />}
 
       {metaPixelId && (
         <Script id="meta-pixel" strategy="afterInteractive">
