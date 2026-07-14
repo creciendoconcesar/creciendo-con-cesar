@@ -1,7 +1,9 @@
 /**
  * Capa de notificaciones desacoplada (ver ARQUITECTURA.md §5).
- * Hoy solo envía por email vía Resend. Para agregar WhatsApp más adelante,
- * se suma un nuevo canal aquí sin tocar los formularios que lo llaman.
+ * Cada envío intenta dos canales de forma independiente: email (Resend) y
+ * respaldo en Google Sheets. Si uno falla, el otro no se ve afectado —
+ * así ninguna aplicación se pierde por completo. Para agregar WhatsApp más
+ * adelante, se suma un nuevo canal aquí sin tocar los formularios.
  */
 
 async function sendEmail(subject: string, body: string) {
@@ -34,19 +36,55 @@ async function sendEmail(subject: string, body: string) {
   }
 }
 
+async function backupToSheet(data: Record<string, string>) {
+  const webhookUrl = process.env.GOOGLE_SHEETS_WEBHOOK_URL;
+
+  if (!webhookUrl) {
+    console.log(
+      "[notifications] GOOGLE_SHEETS_WEBHOOK_URL no configurado. Se omite el respaldo.",
+    );
+    return;
+  }
+
+  try {
+    const res = await fetch(webhookUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+      redirect: "follow",
+    });
+    if (!res.ok) {
+      console.error("[notifications] Falló el respaldo en Sheets:", await res.text());
+    }
+  } catch (err) {
+    console.error("[notifications] Error de red al respaldar en Sheets:", err);
+  }
+}
+
 export async function notifyNewApplication(data: Record<string, string>) {
   const body = Object.entries(data)
     .map(([key, value]) => `${key}: ${value}`)
     .join("\n");
-  await sendEmail(`Nueva aplicación de ${data.nombre ?? "un visitante"}`, body);
+
+  await Promise.allSettled([
+    sendEmail(`Nueva aplicación de ${data.nombre ?? "un visitante"}`, body),
+    backupToSheet({ tipo: "Reunión 1 a 1", ...data }),
+  ]);
 }
 
 export async function notifyNewMasterclassSubscriber(data: {
   email: string;
   telefono?: string;
 }) {
-  await sendEmail(
-    "Nueva inscripción a la Masterclass",
-    `Email: ${data.email}\nTeléfono: ${data.telefono ?? "(no proporcionado)"}`,
-  );
+  await Promise.allSettled([
+    sendEmail(
+      "Nueva inscripción a la Masterclass",
+      `Email: ${data.email}\nTeléfono: ${data.telefono ?? "(no proporcionado)"}`,
+    ),
+    backupToSheet({
+      tipo: "Masterclass",
+      email: data.email,
+      telefono: data.telefono ?? "",
+    }),
+  ]);
 }
