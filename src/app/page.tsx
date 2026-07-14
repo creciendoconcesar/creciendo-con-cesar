@@ -3,6 +3,7 @@ import Image from "next/image";
 import { ButtonLink } from "@/components/Button";
 import { InfoCard } from "@/components/Card";
 import { Badge } from "@/components/Badge";
+import { TestimonialVideo } from "@/components/TestimonialVideo";
 import {
   PhoneIcon,
   PlayIcon,
@@ -13,6 +14,8 @@ import {
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
 };
+
+const testimonioVideoSrc = "/testimonios/testimonio-michel.mp4";
 
 const dolores = [
   {
@@ -195,15 +198,23 @@ export default function Home() {
         <h2 className="mb-10 text-xs font-semibold uppercase tracking-wider text-text-muted">
           No lo digo solo yo
         </h2>
-        <div className="grid gap-6 md:grid-cols-2">
-          <div className="flex aspect-video items-center justify-center rounded-card border border-border bg-surface">
-            <PlayIcon className="h-10 w-10 text-dorado-text" />
-          </div>
+        <div className="grid gap-6 md:grid-cols-[280px_1fr]">
+          <TestimonialVideo src={testimonioVideoSrc} />
           <div className="rounded-card border border-border bg-surface p-7">
             <Badge role="rosa">Testimonio real</Badge>
-            <p className="mt-4 text-sm leading-relaxed text-text-secondary">
-              [ ] — espacio reservado para los mensajes de texto de
-              testimonio que compartiste.
+            <p className="mt-4 text-sm font-semibold text-text-primary">
+              Michel Machado
+            </p>
+            <p className="mb-3 text-xs text-text-muted">
+              Maestro Internacional de Ajedrez · Ministerio del Deporte,
+              Ecuador
+            </p>
+            <p className="text-sm leading-relaxed text-text-secondary">
+              Llevamos 3 años trabajando juntos. Antes de conocernos, la
+              semana de Michel era lunes a viernes de trabajo y el fin de
+              semana como único descanso — sin mucho más plan que ese. Hoy
+              tiene un método claro para avanzar, y ya se permite soñar con
+              metas y proyectos a largo plazo.
             </p>
           </div>
         </div>
