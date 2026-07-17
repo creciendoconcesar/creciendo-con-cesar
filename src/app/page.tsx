@@ -59,35 +59,54 @@ export default function Home() {
   return (
     <>
       {/* Hero */}
-      <section className="mx-auto grid max-w-6xl gap-10 px-6 py-16 md:grid-cols-2 md:items-center md:py-28">
-        <div>
-          <h1 className="mb-5 max-w-xl font-display text-4xl font-bold leading-[1.12] tracking-wide text-text-primary sm:text-5xl">
-            Crecimiento real. Sin promesas falsas.
-          </h1>
-          <p className="mb-8 max-w-md text-base leading-relaxed text-text-secondary">
-            Aprendí a construir ingresos adicionales cometiendo errores que no
-            tenías por qué cometer tú también. Hoy te acompaño a hacerlo con
-            más criterio, más claridad y sin humo.
-          </p>
-          <div className="flex flex-wrap items-center gap-6">
-            <ButtonLink href="/trabaja-conmigo/aplicar" variant="primary">
-              Aplicar para una llamada
-            </ButtonLink>
-            <ButtonLink href="/sobre-mi" variant="secondary">
-              Conoce mi historia
-            </ButtonLink>
+      <section className="mx-auto max-w-6xl px-6 py-16 md:py-24">
+        <div className="lg:grid lg:grid-cols-[1fr_300px] lg:items-start lg:gap-10 xl:grid-cols-[1fr_340px] xl:gap-12">
+          <div>
+            <h1 className="max-w-3xl font-display text-4xl font-extrabold leading-[1.1] tracking-tight text-text-primary sm:text-5xl md:text-6xl lg:text-[64px] xl:text-[70px] xl:leading-[1.1]">
+              <span className="block">¿Trabajas todos</span>
+              <span className="block">los días,</span>
+              <span className="block">
+                pero el <span className="text-dorado-text">dinero</span>
+              </span>
+              <span className="block">nunca alcanza,</span>
+              <span className="block">
+                el <span className="text-dorado-text">tiempo</span> no te
+                sobra
+              </span>
+              <span className="block">
+                y las <span className="text-dorado-text">oportunidades</span>
+              </span>
+              <span className="block">parecen estar siempre</span>
+              <span className="block">para otros?</span>
+            </h1>
+
+            <p className="mb-8 mt-8 max-w-2xl text-base leading-relaxed text-text-secondary sm:text-lg">
+              Descubre cómo aprovechar la nueva economía para desarrollar
+              habilidades de alto valor, crear ingresos adicionales y
+              construir nuevas oportunidades, sin falsas promesas y con una
+              estrategia que puedas aplicar paso a paso.
+            </p>
+            <div className="flex flex-wrap items-center gap-6">
+              <ButtonLink href="/trabaja-conmigo/aplicar" variant="primary">
+                Aplicar para una llamada
+              </ButtonLink>
+              <ButtonLink href="/sobre-mi" variant="secondary">
+                Conoce mi historia
+              </ButtonLink>
+            </div>
           </div>
-        </div>
-        <div>
-          <div className="relative aspect-[4/5] w-full overflow-hidden rounded-card border border-border bg-surface">
-            <Image
-              src="/cesar.jpg"
-              alt="César, fundador de Creciendo con César"
-              fill
-              priority
-              sizes="(min-width: 768px) 480px, 100vw"
-              className="object-cover"
-            />
+
+          <div className="mx-auto mt-10 max-w-sm lg:mx-0 lg:mt-2 lg:max-w-none">
+            <div className="relative aspect-[4/5] w-full overflow-hidden rounded-card border border-border bg-surface">
+              <Image
+                src="/cesar.jpg"
+                alt="César, fundador de Creciendo con César"
+                fill
+                priority
+                sizes="(min-width: 1024px) 340px, (min-width: 640px) 384px, 100vw"
+                className="object-cover"
+              />
+            </div>
           </div>
         </div>
       </section>
