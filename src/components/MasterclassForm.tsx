@@ -6,6 +6,7 @@ import {
   type MasterclassFormState,
 } from "@/app/trabaja-conmigo/masterclass/actions";
 import { Button } from "@/components/Button";
+import { countryCodes } from "@/lib/countryCodes";
 
 const initialState: MasterclassFormState = { status: "idle" };
 
@@ -48,13 +49,32 @@ export function MasterclassForm() {
         >
           Teléfono
         </label>
-        <input
-          id="telefono"
-          name="telefono"
-          type="tel"
-          className="h-11 w-full rounded-xl border border-border bg-surface-2 px-4 text-sm text-text-primary outline-none focus:border-border-strong focus:ring-2 focus:ring-dorado/30"
-          placeholder="+1 305 555 0100"
-        />
+        <div className="flex gap-2">
+          <select
+            id="telefonoPais"
+            name="telefonoPais"
+            aria-label="País"
+            defaultValue=""
+            className="h-11 w-[130px] shrink-0 rounded-xl border border-border bg-surface-2 px-3 text-sm text-text-primary outline-none focus:border-border-strong focus:ring-2 focus:ring-dorado/30"
+          >
+            <option value="" disabled>
+              País
+            </option>
+            {countryCodes.map((c) => (
+              <option key={`${c.iso}-${c.dial}`} value={c.dial}>
+                {c.flag} {c.dial} {c.name}
+              </option>
+            ))}
+          </select>
+          <input
+            id="telefono"
+            name="telefono"
+            type="tel"
+            inputMode="tel"
+            placeholder="Número"
+            className="h-11 flex-1 rounded-xl border border-border bg-surface-2 px-4 text-sm text-text-primary outline-none focus:border-border-strong focus:ring-2 focus:ring-dorado/30"
+          />
+        </div>
       </div>
 
       {state.status === "error" && (

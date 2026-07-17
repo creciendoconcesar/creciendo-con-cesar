@@ -12,7 +12,13 @@ export async function subscribeToMasterclass(
   formData: FormData,
 ): Promise<MasterclassFormState> {
   const email = String(formData.get("email") ?? "").trim().slice(0, 200);
-  const telefono = String(formData.get("telefono") ?? "").trim().slice(0, 50);
+  const telefonoPais = String(formData.get("telefonoPais") ?? "").trim();
+  const telefonoNumero = String(formData.get("telefono") ?? "")
+    .trim()
+    .slice(0, 50);
+  const telefono = telefonoNumero
+    ? `${telefonoPais} ${telefonoNumero}`.trim()
+    : "";
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   if (!email || !emailPattern.test(email)) {

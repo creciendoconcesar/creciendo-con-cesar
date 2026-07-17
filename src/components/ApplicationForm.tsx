@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { submitApplication } from "@/app/trabaja-conmigo/aplicar/actions";
 import { Button } from "@/components/Button";
+import { PhoneInput } from "@/components/PhoneInput";
 
 const STORAGE_KEY = "cwc-aplicacion-v1";
 
@@ -183,9 +184,13 @@ export function ApplicationForm() {
   }
 
   function validateCurrentStep() {
-    const missing = steps[step].fields.filter(
-      (f) => f.required && !values[f.name]?.trim(),
-    );
+    const missing = steps[step].fields.filter((f) => {
+      if (!f.required) return false;
+      if (f.kind === "tel") {
+        return !values[f.name]?.trim() || !values[`${f.name}Pais`]?.trim();
+      }
+      return !values[f.name]?.trim();
+    });
     if (missing.length > 0) {
       setError(
         `Completa "${missing[0].label.replace(/[*].*/, "").trim()}" para continuar.`,
@@ -205,7 +210,14 @@ export function ApplicationForm() {
     }
 
     setSubmitting(true);
-    const result = await submitApplication(values);
+    const { telefonoPais, ...rest } = values;
+    const payload = {
+      ...rest,
+      telefono: telefonoPais
+        ? `${telefonoPais} ${values.telefono ?? ""}`.trim()
+        : (values.telefono ?? ""),
+    };
+    const result = await submitApplication(payload);
     setSubmitting(false);
 
     if (result.ok) {
@@ -265,13 +277,24 @@ export function ApplicationForm() {
               {field.required && " *"}
             </label>
 
-            {(field.kind === "text" || field.kind === "tel") && (
+            {field.kind === "text" && (
               <input
                 id={field.name}
-                type={field.kind}
+                type="text"
                 value={values[field.name] ?? ""}
                 onChange={(e) => update(field.name, e.target.value)}
                 className={inputClasses}
+              />
+            )}
+
+            {field.kind === "tel" && (
+              <PhoneInput
+                id={field.name}
+                countryValue={values[`${field.name}Pais`] ?? ""}
+                numberValue={values[field.name] ?? ""}
+                onCountryChange={(dial) => update(`${field.name}Pais`, dial)}
+                onNumberChange={(v) => update(field.name, v)}
+                required={field.required}
               />
             )}
 
