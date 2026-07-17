@@ -255,6 +255,17 @@ public/                                 Assets estáticos
   la misma sección y lado (derecha en desktop), solo se redujo su columna
   para que el titular domine visualmente. Verificado sin overflow horizontal
   ni quiebres de línea no deseados en 375/640/768/1024/1280px.
+- **Ajuste de tamaño del Hero (2026-07-17, mismo día)**: el H1 original de
+  70px en `xl` resultó demasiado grande y fragmentado (8 líneas forzadas).
+  Se rediseñó a texto fluido natural (sin `<span className="block">` por
+  frase, solo los 3 keywords en dorado como spans inline), con tamaño
+  reducido ~34% en desktop: `lg:text-[42px]` (antes 64px) y
+  `xl:text-[46px]` (antes 70px). El bloque de texto (H1 + subtítulo +
+  botones) ahora mide prácticamente lo mismo que la foto en `xl` (425px vs
+  424px medido). Mobile (`text-4xl`/36px) y tablet (`sm:text-5xl`,
+  `md:text-5xl`/48px) quedaron sin cambios respecto a la versión anterior,
+  ya que el ajuste se limitó a `lg`/`xl` según lo pedido. Subtítulo con
+  `max-w-xl` para 3-4 líneas legibles junto al titular.
 
 ---
 
