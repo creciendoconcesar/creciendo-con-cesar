@@ -1,6 +1,7 @@
 export const siteConfig = {
   name: "Creciendo con César",
   url: "https://creciendoconcesar.online",
+  calendlyUrl: "https://calendly.com/creciendoconcesar/llamada-de-descubrimiento",
   socials: {
     instagram:
       "https://www.instagram.com/creciendoconcesar?igsh=Njk0YmczaHdiMnp3&utm_source=qr",

@@ -4,6 +4,8 @@ import { ButtonLink } from "@/components/Button";
 import { InfoCard } from "@/components/Card";
 import { Badge } from "@/components/Badge";
 import { TestimonialVideo } from "@/components/TestimonialVideo";
+import { VslPlayer } from "@/components/VslPlayer";
+import { LiveViewersBadge } from "@/components/LiveViewersBadge";
 import {
   PhoneIcon,
   PlayIcon,
@@ -16,6 +18,8 @@ export const metadata: Metadata = {
 };
 
 const testimonioVideoSrc = "/testimonios/testimonio-michel.mp4";
+
+const vslYoutubeId = "ajDhiJP6YBE";
 
 const dolores = [
   {
@@ -59,44 +63,28 @@ export default function Home() {
   return (
     <>
       {/* Hero */}
-      <section className="mx-auto max-w-6xl px-6 py-16 md:py-24">
-        <div className="lg:grid lg:grid-cols-[1fr_300px] lg:items-start lg:gap-10 xl:grid-cols-[1fr_340px] xl:gap-12">
-          <div>
-            <h1 className="max-w-2xl font-display text-4xl font-extrabold leading-[1.22] tracking-tight text-text-primary sm:text-5xl md:text-5xl lg:text-[42px] xl:text-[46px]">
-              ¿Trabajas todos los días, pero el{" "}
-              <span className="text-dorado-text">dinero</span> nunca alcanza,
-              el <span className="text-dorado-text">tiempo</span> no te sobra
-              y las <span className="text-dorado-text">oportunidades</span>{" "}
-              parecen estar siempre para otros?
-            </h1>
+      <section className="mx-auto max-w-6xl px-6 py-16 text-center md:py-24">
+        <div className="mx-auto max-w-3xl">
+          <h1 className="mx-auto font-display text-4xl font-extrabold leading-[1.22] tracking-tight text-text-primary sm:text-5xl md:text-5xl lg:text-[42px] xl:text-[46px]">
+            ¿Trabajas todos los días, pero el{" "}
+            <span className="text-dorado-text">dinero</span> nunca alcanza, el{" "}
+            <span className="text-dorado-text">tiempo</span> no te sobra y las{" "}
+            <span className="text-dorado-text">oportunidades</span> parecen
+            estar siempre para otros?
+          </h1>
 
-            <p className="mb-6 mt-4 max-w-xl text-base leading-relaxed text-text-secondary sm:text-lg">
-              Descubre cómo aprovechar la nueva economía para desarrollar
-              habilidades de alto valor, crear ingresos adicionales y
-              construir nuevas oportunidades, sin falsas promesas y con una
-              estrategia que puedas aplicar paso a paso.
-            </p>
-            <div className="flex flex-wrap items-center gap-6">
-              <ButtonLink href="/trabaja-conmigo/aplicar" variant="primary">
-                Aplicar para una llamada
-              </ButtonLink>
-              <ButtonLink href="/sobre-mi" variant="secondary">
-                Conoce mi historia
-              </ButtonLink>
-            </div>
+          <div className="mt-10">
+            <VslPlayer youtubeId={vslYoutubeId} title="Presentación de César" />
           </div>
 
-          <div className="mx-auto mt-10 max-w-sm lg:mx-0 lg:mt-2 lg:max-w-none">
-            <div className="relative aspect-[4/5] w-full overflow-hidden rounded-card border border-border bg-surface">
-              <Image
-                src="/cesar.jpg"
-                alt="César, fundador de Creciendo con César"
-                fill
-                priority
-                sizes="(min-width: 1024px) 340px, (min-width: 640px) 384px, 100vw"
-                className="object-cover"
-              />
-            </div>
+          <div className="mt-5 flex justify-center">
+            <LiveViewersBadge />
+          </div>
+
+          <div className="mt-8">
+            <ButtonLink href="/trabaja-conmigo/aplicar" variant="primary">
+              Aplicar para una llamada
+            </ButtonLink>
           </div>
         </div>
       </section>

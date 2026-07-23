@@ -7,7 +7,7 @@
 > `COPYWRITING.md` (documentos de producto/diseño ya aprobados) — este
 > documento es el resumen operativo para quien mantiene el código.
 >
-> **Última actualización:** 2026-07-17
+> **Última actualización:** 2026-07-22
 
 ---
 
@@ -84,6 +84,8 @@ silencio.
 | **Hotmart** | Checkout externo de los 4 libros | ✅ Activo, links reales en `src/lib/recursos.ts` |
 | **Sanity (CMS)** | Edición de contenido sin tocar código | ⬜ No conectado (planeado a futuro) |
 | **Skool** | Comunidad | ⬜ No existe todavía |
+| **YouTube (VSL del Hero)** | Video de presentación del Home, embebido como "lite facade" | ✅ Activo — ID `ajDhiJP6YBE`, video oculto (unlisted) |
+| **Calendly (`react-calendly`)** | Agendar la llamada 1:1, embebido inline tras enviar el formulario de aplicación | ✅ Activo — evento `creciendoconcesar/llamada-de-descubrimiento` |
 
 ## 6. Flujo de formularios
 
@@ -98,8 +100,13 @@ Dos formularios, ambos como Server Actions + capa de notificaciones común:
    - Action: `src/app/trabaja-conmigo/aplicar/actions.ts` →
      `submitApplication` → sanitiza (trim + límite de 2000 chars por campo) →
      `notifyNewApplication()`.
-   - Sin confirmación automática de "calificado/no calificado" — César revisa
-     manualmente.
+   - **(2026-07-22)** Ya no revisa manualmente antes de agendar: tras un envío
+     exitoso, el formulario muestra un mensaje de confirmación y, debajo,
+     `CalendlyEmbed.tsx` (usa `InlineWidget` de `react-calendly`) con el
+     evento `siteConfig.calendlyUrl` — el visitante agenda de inmediato,
+     sin salir del sitio. Esto reemplaza el flujo documentado en
+     `PRD.md`/`ARQUITECTURA.md` de "César revisa y envía Calendly a mano" —
+     ver nota en §14.
 
 2. **Suscripción a Masterclass** (`/trabaja-conmigo/masterclass`)
    - Componente: `src/components/MasterclassForm.tsx`, usa `useActionState`.
@@ -189,6 +196,9 @@ public/                                 Assets estáticos
 | `PhotoPlaceholder.tsx` | Placeholder visual mientras falta una foto real |
 | `Analytics.tsx` | Inyección condicional de GTM/GA4/Meta Pixel/Clarity |
 | `icons.tsx` | Iconos SVG inline compartidos |
+| `VslPlayer.tsx` | VSL del Hero: "lite facade" de YouTube (miniatura + botón play); el iframe solo se monta al hacer clic, cero carga de video/cookies antes de eso |
+| `LiveViewersBadge.tsx` | Punto verde animado + contador de "personas viendo" que fluctúa 12–20 cada 20–40s (dato simulado, no real — ver §14) |
+| `CalendlyEmbed.tsx` | `InlineWidget` de `react-calendly`, coloreado con la paleta del sitio (negro/dorado), montado solo tras un envío exitoso de `ApplicationForm` |
 
 ## 12. Convenciones de código
 
@@ -219,6 +229,13 @@ public/                                 Assets estáticos
 - Verificar que las env vars de producción en Vercel coincidan con las de
   `.env.local`.
 - Evaluar agregar tests automatizados (hoy no hay ninguno).
+- Si se sube un video VSL con mejor resolución a YouTube, actualizar
+  `vslYoutubeId` en `src/app/page.tsx` (hoy `ajDhiJP6YBE`) — el thumbnail
+  `maxresdefault.jpg` de ese video no existe y cae a `hqdefault.jpg`
+  (menor resolución) vía el fallback de `VslPlayer.tsx`.
+- Decidir si el contador de "personas viendo" (`LiveViewersBadge.tsx`) se
+  mantiene como número simulado o se conecta a un dato real — ver nota de
+  tensión de marca en §14.
 
 ## 14. Decisiones técnicas tomadas
 
@@ -266,6 +283,35 @@ public/                                 Assets estáticos
   `md:text-5xl`/48px) quedaron sin cambios respecto a la versión anterior,
   ya que el ajuste se limitó a `lg`/`xl` según lo pedido. Subtítulo con
   `max-w-xl` para 3-4 líneas legibles junto al titular.
+- **Hero reestructurado alrededor del VSL (2026-07-22)**: se reemplazó la
+  foto del Hero por un video VSL (`VslPlayer.tsx`), y luego se simplificó
+  a una sola columna centrada: Hook (H1) → video → `LiveViewersBadge` →
+  un único botón "Aplicar para una llamada". Se quitaron de esta sección
+  el subtítulo y el segundo botón "Conoce mi historia" (siguen accesibles
+  vía nav/"Sobre Mí") para enfocar la atención solo en el hook y el video.
+  El video original (`VSL Chat.mp4`, 415 MB) no podía commitearse — GitHub
+  bloquea archivos >100MB — así que se aloja en YouTube como oculto
+  (unlisted) y se embebe con el patrón "lite facade": miniatura +
+  botón de play, sin cargar el iframe/cookies de YouTube hasta el clic.
+- **Contador de viewers es un dato simulado, no real** (`LiveViewersBadge.tsx`):
+  fluctúa 12–20 cada 20–40s vía `setTimeout`, con fade de 300ms. Se señaló
+  a César que esto entra en tensión con el posicionamiento de "sin
+  promesas falsas" de `PRD.md`; lo confirmó explícitamente y se implementó
+  tal cual. Si en el futuro se quiere basar en datos reales, reemplazar la
+  lógica de `randomViewers()` por una fuente real (ej. analítica en vivo).
+- **Calendly integrado inline, no manual (2026-07-22)**: `PRD.md`/
+  `ARQUITECTURA.md` documentaban como decisión confirmada de v1 que César
+  revisaría cada aplicación manualmente antes de enviar su link de
+  Calendly por mensaje. Esa decisión fue revertida explícitamente por
+  César: ahora, tras cualquier envío exitoso de `ApplicationForm`, se
+  muestra un mensaje de confirmación y de inmediato el calendario
+  (`CalendlyEmbed.tsx`, `react-calendly` → `InlineWidget`) para agendar sin
+  salir del sitio ni filtro manual previo. Se agregó la dependencia
+  `react-calendly` (`npm install`). El evento usado es
+  `siteConfig.calendlyUrl` en `src/lib/site.ts`. No requiere variables de
+  entorno nuevas (la URL es pública). Verificado que Resend, Google
+  Sheets, GA4 y Clarity siguen intactos — el cambio solo afecta qué se
+  renderiza después de que `submitApplication` devuelve éxito.
 
 ---
 

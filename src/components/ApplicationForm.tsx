@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { submitApplication } from "@/app/trabaja-conmigo/aplicar/actions";
 import { Button } from "@/components/Button";
 import { PhoneInput } from "@/components/PhoneInput";
+import { CalendlyEmbed } from "@/components/CalendlyEmbed";
+import { siteConfig } from "@/lib/site";
 
 const STORAGE_KEY = "cwc-aplicacion-v1";
 
@@ -172,12 +174,19 @@ export function ApplicationForm() {
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   useEffect(() => {
     if (Object.keys(values).length > 0) {
       window.localStorage.setItem(STORAGE_KEY, JSON.stringify(values));
     }
   }, [values]);
+
+  useEffect(() => {
+    if (!submitted) return;
+    const frame = requestAnimationFrame(() => setShowConfirmation(true));
+    return () => cancelAnimationFrame(frame);
+  }, [submitted]);
 
   function update(name: string, value: string) {
     setValues((prev) => ({ ...prev, [name]: value }));
@@ -235,19 +244,30 @@ export function ApplicationForm() {
 
   if (submitted) {
     return (
-      <div className="rounded-card border border-border bg-surface p-8 text-center">
-        <p className="mb-3 font-display text-xl font-bold text-text-primary">
-          Gracias por tu tiempo y tu honestidad.
-        </p>
-        <p className="text-sm leading-relaxed text-text-secondary">
-          Voy a revisar tu aplicación personalmente — no es un proceso
-          automático. Si veo que encajamos, te voy a escribir directamente
-          para coordinar la llamada. Si no es el momento, también te voy a
-          contactar con algo que sí te sirva.
-        </p>
-        <p className="mt-4 text-xs text-text-muted">
-          Revisa tu teléfono y tu correo en los próximos días.
-        </p>
+      <div
+        className={`transition-all duration-700 ease-out ${
+          showConfirmation
+            ? "translate-y-0 opacity-100"
+            : "translate-y-4 opacity-0"
+        }`}
+      >
+        <div className="rounded-card border border-border bg-surface p-8 text-center">
+          <p className="mb-3 font-display text-xl font-bold text-verde-text">
+            ✅ ¡Excelente! Tu aplicación fue recibida correctamente.
+          </p>
+          <p className="mb-4 text-sm font-semibold text-text-primary">
+            Ahora solo falta un último paso.
+          </p>
+          <p className="mx-auto max-w-lg text-sm leading-relaxed text-text-secondary">
+            Agenda una llamada de aproximadamente 40 minutos para revisar tu
+            caso, responder tus preguntas y evaluar si realmente puedo
+            ayudarte. Selecciona el día y la hora que mejor te convengan.
+          </p>
+        </div>
+
+        <div className="mt-6">
+          <CalendlyEmbed url={siteConfig.calendlyUrl} />
+        </div>
       </div>
     );
   }
