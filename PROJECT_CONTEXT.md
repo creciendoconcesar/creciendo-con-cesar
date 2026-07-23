@@ -84,7 +84,7 @@ silencio.
 | **Hotmart** | Checkout externo de los 4 libros | ✅ Activo, links reales en `src/lib/recursos.ts` |
 | **Sanity (CMS)** | Edición de contenido sin tocar código | ⬜ No conectado (planeado a futuro) |
 | **Skool** | Comunidad | ⬜ No existe todavía |
-| **YouTube (VSL del Hero)** | Video de presentación del Home, embebido como "lite facade" | ✅ Activo — ID `ajDhiJP6YBE`, video oculto (unlisted) |
+| **YouTube (VSL del Hero)** | Video de presentación del Home, embebido como "lite facade" | ✅ Activo — ID `5A1ql6T_Vqg` (2026-07-22), video oculto (unlisted), thumbnail `maxresdefault.jpg` disponible en HD |
 | **Calendly (`react-calendly`)** | Agendar la llamada 1:1, embebido inline tras enviar el formulario de aplicación | ✅ Activo — evento `creciendoconcesar/llamada-de-descubrimiento` |
 
 ## 6. Flujo de formularios
@@ -229,10 +229,6 @@ public/                                 Assets estáticos
 - Verificar que las env vars de producción en Vercel coincidan con las de
   `.env.local`.
 - Evaluar agregar tests automatizados (hoy no hay ninguno).
-- Si se sube un video VSL con mejor resolución a YouTube, actualizar
-  `vslYoutubeId` en `src/app/page.tsx` (hoy `ajDhiJP6YBE`) — el thumbnail
-  `maxresdefault.jpg` de ese video no existe y cae a `hqdefault.jpg`
-  (menor resolución) vía el fallback de `VslPlayer.tsx`.
 - Decidir si el contador de "personas viendo" (`LiveViewersBadge.tsx`) se
   mantiene como número simulado o se conecta a un dato real — ver nota de
   tensión de marca en §14.
